@@ -1,34 +1,45 @@
-// - Make sure you check and understand the data that is given to you!
-// - Create a card using JS that represents a single pokemon, use the example image as a reference. You will also find an HTML example commented out in the index.html
-// - Use the exact CSS classes you see in the example HTML to obtain the same style for each card
-// - The cards should be nested inside <ul class="cards"></ul>
-// - Use the official-artwork object key as the images for the card. The images are all inside of the sprites key, in each pokemon object
-// pokemon.sprites.other['official-artwork'].front_default
 
-// - Render all the cards on the page that represents all the pokemons, recreating the same layout, using JS
-
-console.log(data);
 
 // - Create a card using JS that represents a single pokemon
-function createCard()  {
+function createPokemon (pokemon)  {
+
+    const image = pokemon.sprites.other['official-artwork'].front_default
+
+    //Create main li element
 const liEl = document.createElement('li')
-liEl.setAttribute("class", "card")
+liEl.setAttribute('class', 'card')
 
+//Create pokemon title
+const titleEl = document.createElement("h2")
+titleEl.textContent = pokemon.name
 
-const h2El = document.createElement("h2")
-h2El.textContent = "Bulbasaur"
-h2El.setAttribute("class", "title")
+//Create pokemon image
+const imageEl =document.createElement('img')
+imageEl.setAttribute('width', '256')
+imageEl.setAttribute('class', 'card--img')
+imageEl.setAttribute('src', image)
 
+//Create pokemon attributes ul
+const attributesEl = document.createElement('ul')
+attributesEl.setAttribute('class', 'card--text')
 
-const imgEl =document.createElement('img')
-imgEl.setAttribute("src", "https://raw.githubusercontent.com/pokeapi/sprites/master/sprites/pokemon/other/official-artwork/1.png")
-imgEl.setAttribute("class", "bulbasaur-image")
-imgEl.setAttribute("alt", "")
+//Create pokemon attributes li for each stat
+for( const statData of pokemon.stats) {
+    const text =  ` ${statData.stat.name.toUpperCase()}: ${statData.base_stat}`
+    const attributeEl = document.createElement('li')
+    attributeEl.textContent = text
+    attributesEl.append(attributeEl)
+}
 
-const card = document.querySelector(".cards")
+//Add li's children
+liEl.append(titleEl, imageEl, attributesEl)
 
-card.append(liEl, h2El, imgEl)
-
+//Add pokemon li to .cards ul
+const ulEl = document.querySelector('.cards')
+ulEl.append(liEl)
 
 }
-createCard()
+
+for ( const pokemon of pokemons){
+    createPokemon(pokemon)
+}
